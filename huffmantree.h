@@ -5,6 +5,7 @@ struct treenode {
         int nbits;
         long unsigned int n;
         char character;
+        int freq;
         struct treenode *zero;
         struct treenode *one;
 };
