@@ -33,7 +33,7 @@ int main () {
 
         printf("heapSort = ");
         for (int i = 0; i < n; i++) {
-                int *e_ptr = (int*) remove_max(&my_heap);
+                int *e_ptr = (int*) remove_min(&my_heap);
                 printf("%d ", *e_ptr);
         }
         printf("\n");     
