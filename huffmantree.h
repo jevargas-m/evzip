@@ -5,10 +5,16 @@ struct treenode {
         int nbits;
         long unsigned int n;
         char character;
-        int freq;
+        unsigned int freq;
         struct treenode *zero;
         struct treenode *one;
 };
+
+#define NUMBER_OF_CHARS 256
+struct treenode *codes [NUMBER_OF_CHARS];
+
+
+void traverse(struct treenode *root);
 
 /* given an array of ints representing frequencies indexed by ascii code
  * build a huffman tree returning its root

@@ -1,23 +1,28 @@
+#define DEBUG
+
 #include <stdlib.h>
 #include <assert.h>
+
+#ifdef DEBUG
+        #include <stdio.h>
+#endif
 
 #include "huffmantree.h"
 #include "heap/heap.h"
 
-#define NUMBER_OF_CHARS 256
 #define MAX_NODES_FACTOR 2
 
 int compare_freqs(void* n1, void* n2) {
         struct treenode *n1_ptr = (struct treenode*) n1;
         struct treenode *n2_ptr = (struct treenode*) n2;
 
-        return n1_ptr->freq - n2_ptr->freq;
+        return n2_ptr->freq - n1_ptr->freq;
 }
 
 struct treenode* create_internal_node(struct treenode *n1, struct treenode *n2) {
         struct treenode* new_node = malloc (sizeof(struct treenode));
         
-        new_node->character = '\0';
+        new_node->character = 0;
         new_node->freq = n1->freq + n2->freq;
         new_node->n = 0;
         new_node->nbits = 0;
@@ -40,9 +45,6 @@ struct treenode* create_leaf(int character, int freq) {
         return leaf;
 }
 
-
-
-
 /* given an array of ints representing frequencies indexed by ascii code
  * build a huffman tree returning its root
  * returns tree root and array of leaves to use for decoding in constant time
@@ -54,7 +56,9 @@ struct treenode* build_tree(int *frequencies) {
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
                 if (frequencies[i] > 0) {
                         struct treenode *n = create_leaf(i, frequencies[i]);
-                
+#ifdef DEBUG
+        printf("adding char = %c, freq = %d\n", i, frequencies[i]);
+#endif
                         int ret = add_element(&h, (void *) n);
                         assert(ret != -1);
                 }
@@ -79,4 +83,36 @@ struct treenode* build_tree(int *frequencies) {
         destroy_heap(&h);
 
         return root; 
+}
+
+void traverse(struct treenode *root) {
+        if (root->zero) {
+                if (root->nbits > 0)
+                        (root->zero)->n = root->n << 1;
+
+                (root->zero)->nbits = root->nbits + 1;
+                traverse(root->zero);
+        }
+        
+#ifdef DEBUG
+        printf("node = %p\n", root);
+        printf("zero = %p\n", root->zero);
+        printf("one = %p\n", root->one);
+        printf("char = %c\n", root->character);
+        printf("freq = %d\n", root->freq);
+        printf("nbits = %d\n", root->nbits);
+        printf("n = x%04lx\n", root->n);
+        printf("--------------------------------------\n");
+#endif
+        //codes[root->character] = root;
+              
+        if (root->one) {
+                if (root->nbits > 0)
+                        (root->one)->n = root->n << 1;
+                
+                (root->one)->n = root->n + 1;
+                (root->one)->nbits = root->nbits + 1;
+                
+                traverse(root->one);
+        }
 }
