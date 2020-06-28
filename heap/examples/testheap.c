@@ -26,8 +26,7 @@ int main () {
 
         printf("heap = ");
         for (int i = 1; i <= n; i++) {
-                void **a = my_heap->array;
-                int *e_ptr = (int*) a[i];
+                int *e_ptr = (int*) my_heap->array[i];
                 printf("%d ", *e_ptr);
         }
         printf("\n");      

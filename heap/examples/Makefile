@@ -1,8 +1,8 @@
 # Define variable CC to be the compiler we want to use
 CC = clang
 
-# Define CFLAGS for the flags we will want to use with clang
-CFLAGS = -g -Wall -pthread
+# Define CFLAGS for the flags we will want to use with compiler
+CFLAGS = -g -Wall
 
 # Output executable
 TARGET = testheap
@@ -30,7 +30,7 @@ heap.o: ../heap.c ../heap.h
 $(TARGET): $(TARGET_DEPENDENCIES)
 	$(CC) $(CFLAGS) $^ -o $@
 
-# $(RM) is the platform agnostic way to delete a file (here rm -f)
+# $(RM) is the platform agnostic way to delete a file
 clean:
 	$(RM) $(TARGET)
 	$(RM) $(TARGET_DEPENDENCIES)
