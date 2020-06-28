@@ -3,7 +3,7 @@
 
 struct treenode {
         int nbits;
-        int n;
+        long unsigned int n;
         char character;
         struct treenode *zero;
         struct treenode *one;
