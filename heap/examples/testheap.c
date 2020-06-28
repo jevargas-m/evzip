@@ -40,6 +40,7 @@ int main () {
         printf("\n");    
 
         assert (remove_min(&my_heap) == NULL );
+        assert(my_heap->size == 0);
         
         printf("input = ");
         for (int i = 0; i < n; i++) {
