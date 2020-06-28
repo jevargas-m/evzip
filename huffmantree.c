@@ -1,4 +1,4 @@
-#define DEBUG
+// #define DEBUG
 
 #include <stdlib.h>
 #include <assert.h>
@@ -20,7 +20,7 @@ int compare_freqs(void* n1, void* n2) {
 }
 
 struct treenode* create_internal_node(struct treenode *n1, struct treenode *n2) {
-        struct treenode* new_node = malloc (sizeof(struct treenode));
+        struct treenode* new_node = malloc(sizeof(struct treenode));
         
         new_node->character = 0;
         new_node->freq = n1->freq + n2->freq;
@@ -56,9 +56,7 @@ struct treenode* build_tree(int *frequencies) {
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
                 if (frequencies[i] > 0) {
                         struct treenode *n = create_leaf(i, frequencies[i]);
-#ifdef DEBUG
-        printf("adding char = %c, freq = %d\n", i, frequencies[i]);
-#endif
+
                         int ret = add_element(&h, (void *) n);
                         assert(ret != -1);
                 }
@@ -104,13 +102,16 @@ void traverse(struct treenode *root) {
         printf("n = x%04lx\n", root->n);
         printf("--------------------------------------\n");
 #endif
-        //codes[root->character] = root;
-              
+        if (root->zero == NULL && root->one == NULL) {
+                int i = (int) root->character;
+                codes[i] = root;
+        }
+                
         if (root->one) {
                 if (root->nbits > 0)
                         (root->one)->n = root->n << 1;
                 
-                (root->one)->n = root->n + 1;
+                (root->one)->n += 1;
                 (root->one)->nbits = root->nbits + 1;
                 
                 traverse(root->one);
