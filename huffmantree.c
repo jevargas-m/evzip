@@ -11,6 +11,7 @@
 #include "heap/heap.h"
 
 #define MAX_NODES_FACTOR 2
+struct treenode *codes [NUMBER_OF_CHARS] = {0};
 
 int compare_freqs(void* n1, void* n2) {
         struct treenode *n1_ptr = (struct treenode*) n1;
@@ -113,7 +114,36 @@ void traverse(struct treenode *root) {
                 
                 (root->one)->n += 1;
                 (root->one)->nbits = root->nbits + 1;
-                
                 traverse(root->one);
         }
+}
+
+void build_codes(int *frequencies) {
+        struct treenode *root = build_tree(frequencies);
+        traverse(root);
+}
+
+struct treenode* encode_char(char c) {
+        int i = (int) c;
+        return codes[i];
+}
+
+struct treenode* decode_bit(struct treenode *root, unsigned short bit) {
+        assert(bit == 1 || bit == 0);
+
+        struct treenode *next;
+        
+        if (bit == 1) {
+                if (root->one == NULL)
+                        return NULL;
+                
+                next = root->one;
+        } else {
+                if (root->zero == NULL)
+                        return NULL;
+                
+                next = root->zero;
+        }
+
+        return next;
 }

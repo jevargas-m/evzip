@@ -11,28 +11,20 @@ struct treenode {
 };
 
 #define NUMBER_OF_CHARS 256
-struct treenode *codes [NUMBER_OF_CHARS];
-
-
-void traverse(struct treenode *root);
-
-/* given an array of ints representing frequencies indexed by ascii code
- * build a huffman tree returning its root
- */ 
-struct treenode* build_tree(int *frequencies);
 
 /* add a bit and return next node in the tree, if its a leaf
  * zero and one pointers will be null and nbits/n/character
  *  contain relevant values
+ *  return null pointer if trying to decode something inexistent
  */ 
-struct treenode* decode_bit(struct treenode *t, unsigned short bit);
+struct treenode* decode_bit(struct treenode *root, unsigned short bit);
 
 /* given a char and a huffman tree return a leaf node with 
  * its proper encoding
+ * return: NULL if char is not a leaf on the tree
  */ 
-struct treenode* encode_char(struct treenode *root, char c);
+struct treenode* encode_char(char c);
 
-/* map tree leaves into an array of nodes indexed by ASCII code */
-int* build_code_array(struct treenode *root);
+void build_codes(int *frequencies);
 
 #endif

@@ -6,14 +6,13 @@ int main() {
 
         freqs['a'] = 15;
         freqs['b'] = 5;
-        freqs['c'] = 10;
-        freqs['d'] = 20;
-        
-        /* freqs['e'] = 20;
+        freqs['c'] = 100;
+        freqs['d'] = 10;
+        freqs['e'] = 20;
         freqs['f'] = 10;
         freqs['g'] = 15;
         freqs['h'] = 15;
-*/
+
         for (int i = 0; i < NUMBER_OF_CHARS; i++)
                codes[i] = 0; 
 
