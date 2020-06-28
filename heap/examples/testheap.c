@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "../../heap.h"
+#include "../heap.h"
 
 int cmp(void* e1, void* e2) {
         int* e1_int = (int*) e1;
@@ -22,6 +22,7 @@ int main () {
                 add_element(&my_heap, (void*) &my_ints[i]);
         
         assert(my_heap->size == n);
+        assert(add_element(&my_heap, (void*) &my_ints[0]) == -1);
 
         printf("heap = ");
         for (int i = 1; i <= n; i++) {
@@ -36,7 +37,9 @@ int main () {
                 int *e_ptr = (int*) remove_min(&my_heap);
                 printf("%d ", *e_ptr);
         }
-        printf("\n");     
+        printf("\n");    
+
+        assert (remove_min(&my_heap) == NULL );
         
         printf("input = ");
         for (int i = 0; i < n; i++) {

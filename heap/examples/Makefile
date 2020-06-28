@@ -23,7 +23,7 @@ all: $(TARGET)
 testheap.o: testheap.c 
 	$(CC) -c $(CFLAGS) $< -o $@
 
-heap.o: ../../heap.c ../../heap.h 
+heap.o: ../heap.c ../heap.h 
 	$(CC) -c $(CFLAGS) $< -o $@
 
 # TARGET linking
