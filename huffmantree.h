@@ -25,5 +25,7 @@ struct treenode* decode_bit(struct treenode *t, unsigned short bit);
  */ 
 struct treenode* encode_char(struct treenode *root, char c);
 
+/* map tree leaves into an array of nodes indexed by ASCII code */
+int* build_code_array(struct treenode *root);
 
 #endif
