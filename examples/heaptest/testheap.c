@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-#include "../heap.h"
+#include "../../heap.h"
 
 int cmp(void* e1, void* e2) {
         int* e1_int = (int*) e1;
@@ -33,7 +33,7 @@ int main () {
 
         printf("heapSort = ");
         for (int i = 0; i < n; i++) {
-                int *e_ptr = (int*) remove_min(&my_heap);
+                int *e_ptr = (int*) remove_max(&my_heap);
                 printf("%d ", *e_ptr);
         }
         printf("\n");     
