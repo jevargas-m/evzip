@@ -12,7 +12,7 @@ int cmp(void* e1, void* e2) {
 int main () {
 
         int my_ints [] = {3, 5, 10, 1, 30, 4, 20, -5, 100, 8, 25};
-        int n = 11;
+        int n = sizeof(my_ints) / sizeof(int);
 
         struct heap *my_heap = create_heap(n, cmp);
 
@@ -34,6 +34,7 @@ int main () {
         printf("heapSort = ");
         for (int i = 0; i < n; i++) {
                 int *e_ptr = (int*) remove_min(&my_heap);
+                assert(my_heap->size == n - i - 1);
                 printf("%d ", *e_ptr);
         }
         printf("\n");    
