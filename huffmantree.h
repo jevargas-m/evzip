@@ -25,6 +25,8 @@ struct treenode* decode_bit(struct treenode *root, unsigned short bit);
  */ 
 struct treenode* encode_char(char c);
 
-void build_codes(int *frequencies);
+struct treenode* build_codes(int *frequencies);
+
+unsigned short msb(long unsigned int n, int nbits, int bit_position);
 
 #endif

@@ -118,9 +118,11 @@ void traverse(struct treenode *root) {
         }
 }
 
-void build_codes(int *frequencies) {
+struct treenode* build_codes(int *frequencies) {
         struct treenode *root = build_tree(frequencies);
         traverse(root);
+
+        return root;
 }
 
 struct treenode* encode_char(char c) {
@@ -146,4 +148,11 @@ struct treenode* decode_bit(struct treenode *root, unsigned short bit) {
         }
 
         return next;
+}
+
+unsigned short msb(long unsigned int n, int nbits, int bit_position) {
+        int size = sizeof(long unsigned int) * 8; /* 8 bits per byte */
+        long unsigned int tmp = n << (size - nbits + bit_position - 1);
+
+        return (unsigned short) (tmp >> (size - 1));
 }
