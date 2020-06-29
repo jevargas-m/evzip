@@ -14,7 +14,7 @@ int main() {
         freqs['d'] = 10;
         freqs['E'] = 20;
         freqs['f'] = 10;
-        freqs['g'] = 15;
+        freqs[' '] = 15;
         freqs['h'] = 15;
 
         struct treenode *root = build_codes(freqs);
@@ -23,17 +23,16 @@ int main() {
                 if (freqs[i]) {
                         /* test encode and print results */
                         struct treenode *code = encode_char((char) i);
-                        printf("%c : nbits = %d, n = x%04lx\n", i, code->nbits, code->n);
+                        printf("%c : nbits = %d, n = x%04lx, ", i, code->nbits, code->n);
 
                         /* test proper decoding */
                         struct treenode *r = root;
                         for (int p = 1; p <= code->nbits; p++) {
                                unsigned short bit = msb(code->n, code->nbits, p);
-        #ifdef DEBUG
-                printf("msb = %d\n", bit);
-        #endif
+                               printf("%d", bit);
                                r = decode_bit(r, bit); 
                         }
+                        printf("\n");
                         assert(r->character == (char) i);
                 }
         }
