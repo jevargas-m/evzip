@@ -133,25 +133,14 @@ struct treenode* encode_char(char c) {
 struct treenode* decode_bit(struct treenode *root, unsigned short bit) {
         assert(bit == 1 || bit == 0);
 
-        struct treenode *next;
-        
-        if (bit == 1) {
-                if (root->one == NULL)
-                        return NULL;
-                
-                next = root->one;
-        } else {
-                if (root->zero == NULL)
-                        return NULL;
-                
-                next = root->zero;
-        }
-
-        return next;
+        if (bit == 1)
+                return root->one ? root->one : NULL;
+        else
+                return root->zero ? root->zero : NULL;
 }
 
 unsigned short msb(long unsigned int n, int nbits, int bit_position) {
-        int size = sizeof(long unsigned int) * 8; /* 8 bits per byte */
+        int size = sizeof(n) * 8; /* 8 bits per byte */
         long unsigned int tmp = n << (size - nbits + bit_position - 1);
 
         return (unsigned short) (tmp >> (size - 1));
