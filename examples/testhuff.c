@@ -14,9 +14,17 @@ int main() {
         freqs['d'] = 10;
         freqs['E'] = 20;
         freqs['f'] = 10;
-        freqs[' '] = 15;
+        freqs['*'] = 15;
         freqs['h'] = 15;
-
+        freqs['i'] = 15;
+        freqs['j'] = 5;
+        freqs['k'] = 200;
+        freqs['L'] = 45;
+        freqs['M'] = 20;
+        freqs['N'] = 70;
+        freqs['o'] = 1;
+        freqs['p'] = 8;
+        
         struct treenode *root = build_codes(freqs);
 
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
