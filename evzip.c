@@ -36,12 +36,12 @@ int main(int argc, char **argv)
                 if (freqs[i]) {
                         /* test encode and print results */
                         struct treenode *code = encode_char((char) i);
-                        printf("%c\t: freq = %d\tnbits = %d\tn = x%04lx\t", i, freqs[i], code->nbits, code->n);
+                        printf("%c\t: freq = %d\tnbits = %d\tn = x%04lx\t", i, freqs[i], code->nbits, code->code);
 
                         /* test proper decoding */
                         struct treenode *r = root;
                         for (int p = 1; p <= code->nbits; p++) {
-                               unsigned short bit = msb(code->n, code->nbits, p);
+                               unsigned short bit = get_i_bit(code->code, code->nbits, p);
                                printf("%d", bit);
                                r = decode_bit(r, bit); 
                         }
@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 
                 
                 for (int i = 1; i <= t->nbits; i++) {
-                        unsigned short bit = msb(t->n, t->nbits, i);
+                        unsigned char bit = get_i_bit(t->code, t->nbits, i);
                         out_char += bit;
                         bit_counter++;
                         if (bit_counter == 8 * sizeof(out_char)) {
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
         while ( fread(&code_in, sizeof(code_in), 1, sf) == 1) {
                 
                 for (int i = 1; i <= 8; i++) {
-                        unsigned short bit = msb((long unsigned int) code_in, 8, sizeof(long unsigned int) - 8 + i);
+                        unsigned char bit = get_i_bit((long unsigned int) code_in, 8, sizeof(long unsigned int) - 8 + i);
                         t = decode_bit(t, bit);
                         if (t == NULL)
                                 break;

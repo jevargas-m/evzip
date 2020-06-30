@@ -3,7 +3,7 @@
 
 struct treenode {
         int nbits;
-        long unsigned int n;
+        long unsigned int code;
         char character;
         unsigned int freq;
         struct treenode *zero;
@@ -27,6 +27,8 @@ struct treenode* encode_char(char c);
 
 struct treenode* build_codes(int *frequencies);
 
-unsigned short msb(long unsigned int n, int nbits, int bit_position);
+/* get the i'th bit on a number n of nbits (start at 1 end at nbits)
+ */
+unsigned char get_i_bit(long unsigned int n, int nbits, int i);
 
 #endif

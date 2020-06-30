@@ -36,7 +36,7 @@ int main() {
                         /* test proper decoding */
                         struct treenode *r = root;
                         for (int p = 1; p <= code->nbits; p++) {
-                               unsigned short bit = msb(code->n, code->nbits, p);
+                               unsigned short bit = msb(code->code, code->nbits, p);
                                printf("%d", bit);
                                r = decode_bit(r, bit); 
                         }
