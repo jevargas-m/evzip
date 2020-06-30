@@ -1,3 +1,5 @@
+#define DEBUG
+
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
@@ -47,7 +49,6 @@ int main(int argc, char **argv)
                         assert(r->character == (char) i);
                 }
         }
-        
 
         f = fopen(filename, "r"); 
         char tgt_file [100];
@@ -57,9 +58,11 @@ int main(int argc, char **argv)
 
         int bit_counter = 0;
         int counter = 0;
-        int out_char = 0;
+        unsigned char out_char = 0;
+        unsigned long int total_chars = 0;
         while ((c = fgetc(f)) != EOF) {
                 counter++;
+                total_chars++;
                 struct treenode *t = encode_char(c);
                 if (t == NULL) {
                         printf("ERROR: file not properly ASCII formated, %c at %d not recognized\n", c, counter);
@@ -71,12 +74,10 @@ int main(int argc, char **argv)
                 
                 for (int i = 1; i <= t->nbits; i++) {
                         unsigned short bit = msb(t->n, t->nbits, i);
-                        
                         out_char += bit;
                         bit_counter++;
-                        if (bit_counter == 8) {
-                                assert(out_char != EOF);
-                                fwrite(&out_char, 1, 1, tgt);
+                        if (bit_counter == 8 * sizeof(out_char)) {
+                                fwrite(&out_char, sizeof(out_char), 1, tgt);
                                 bit_counter = 0;
                                 out_char = 0;
                         }
@@ -85,6 +86,12 @@ int main(int argc, char **argv)
                 
                 
         }
+        /* write residual bits in MSB-s with trailing 0 */
+        if (bit_counter) {
+                out_char = out_char << (8 * sizeof(out_char) - bit_counter - 1);
+                fwrite(&out_char, sizeof(out_char), 1, tgt);
+        }
+                
         fclose(f);
         fclose(tgt);
 
@@ -100,7 +107,7 @@ int main(int argc, char **argv)
         unsigned char code_in = 0;
         struct treenode *t = root;
         while ( fread(&code_in, sizeof(code_in), 1, sf) == 1) {
-                counter++;
+                
                 for (int i = 1; i <= 8; i++) {
                         unsigned short bit = msb((long unsigned int) code_in, 8, sizeof(long unsigned int) - 8 + i);
                         t = decode_bit(t, bit);
@@ -108,6 +115,9 @@ int main(int argc, char **argv)
                                 break;
                         if (t->one == NULL && t->zero == NULL) {
                                 fputc(t->character, tf);
+                                counter++;
+                                if (counter == total_chars)
+                                        break;
                                 t = root;
                         }
                 }
