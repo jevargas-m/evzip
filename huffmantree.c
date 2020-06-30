@@ -77,8 +77,6 @@ struct treenode* build_tree(int *frequencies) {
         }
 
         struct treenode *root = remove_min(&h);
-        assert(root);
-        
         destroy_heap(&h);
 
         return root; 

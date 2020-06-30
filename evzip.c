@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
         int bit_counter = 0;
         int counter = 0;
-        char out_char = 0;
+        int out_char = 0;
         while ((c = fgetc(f)) != EOF) {
                 counter++;
                 struct treenode *t = encode_char(c);
@@ -75,7 +75,8 @@ int main(int argc, char **argv)
                         out_char += bit;
                         bit_counter++;
                         if (bit_counter == 8) {
-                                fputc(out_char, tgt);
+                                assert(out_char != EOF);
+                                fwrite(&out_char, 1, 1, tgt);
                                 bit_counter = 0;
                                 out_char = 0;
                         }
@@ -87,7 +88,33 @@ int main(int argc, char **argv)
         fclose(f);
         fclose(tgt);
 
-        
-        
+        /* decode here */
+        char dest_txt [100] = {0};
+        strcat(dest_txt, filename);
+        strcat(dest_txt, ".atxt");
+        FILE *sf = fopen(tgt_file, "rb"); 
+        FILE *tf = fopen(dest_txt, "w"); 
+
+        bit_counter = 0;
+        counter = 0;
+        unsigned char code_in = 0;
+        struct treenode *t = root;
+        while ( fread(&code_in, sizeof(code_in), 1, sf) == 1) {
+                counter++;
+                for (int i = 1; i <= 8; i++) {
+                        unsigned short bit = msb((long unsigned int) code_in, 8, sizeof(long unsigned int) - 8 + i);
+                        t = decode_bit(t, bit);
+                        if (t == NULL)
+                                break;
+                        if (t->one == NULL && t->zero == NULL) {
+                                fputc(t->character, tf);
+                                t = root;
+                        }
+                }
+                
+        }
+        fclose(sf);
+        fclose(tf);
+
         return 0;
 }
