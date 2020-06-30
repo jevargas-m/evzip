@@ -170,6 +170,6 @@ void destroy_tree(struct treenode **root)
         if ((*root)->one)
                 destroy_tree(&(*root)->one);
         
-        free((*root));
+        free(*root);
         *root = NULL;
 }
