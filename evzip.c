@@ -126,5 +126,7 @@ int main(int argc, char **argv)
         fclose(sf);
         fclose(tf);
 
+        destroy_tree(root);
+
         return 0;
 }

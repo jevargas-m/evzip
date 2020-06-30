@@ -161,3 +161,14 @@ unsigned char get_i_bit(long unsigned int n, int nbits, int i)
 
         return (unsigned short) (tmp >> (size - 1));
 }
+
+void destroy_tree(struct treenode *root)
+{
+        if (root->zero)
+                destroy_tree(root->zero);
+
+        if (root->one)
+                destroy_tree(root->one);
+        
+        free(root);
+}
