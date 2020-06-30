@@ -68,33 +68,33 @@ void pretty_print_node(struct treenode *n)
 struct treenode* build_tree(int *frequencies)
 {
         /* full binary tree has at most 2n-1 nodes */
-        struct heap *h = create_heap((2 * NUMBER_OF_CHARS - 1), compare_freqs);
+        struct heap *heap = create_heap((2 * NUMBER_OF_CHARS - 1), compare_freqs);
 
         /* populate heap with all leaves */
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
                 if (frequencies[i] > 0) {
                         struct treenode *n = create_leaf(i, frequencies[i]);
 
-                        int ret = add_element(&h, (void *) n);
+                        int ret = add_element(&heap, (void *) n);
                         assert(ret != -1);
                 }
         }
 
         /* combine nodes with minumum freqs until only one node remains */
-        while (h->size > 1) {
-                struct treenode *min_1 = (struct treenode*) remove_min(&h);
+        while (heap->size > 1) {
+                struct treenode *min_1 = (struct treenode*) remove_min(&heap);
                 assert(min_1);
 
-                struct treenode *min_2 = (struct treenode*) remove_min(&h);
+                struct treenode *min_2 = (struct treenode*) remove_min(&heap);
                 assert(min_2);
 
                 struct treenode *new_parent = create_internal_node(min_1, min_2);
-                int ret = add_element(&h, (void *) new_parent);
+                int ret = add_element(&heap, (void *) new_parent);
                 assert(ret != -1);
         }
 
-        struct treenode *root = remove_min(&h);
-        destroy_heap(&h);
+        struct treenode *root = remove_min(&heap);
+        destroy_heap(&heap);
 
         return root; 
 }
