@@ -99,11 +99,11 @@ void* remove_min(struct heap **h) {
         if ((*h)->size == 0)
                 return NULL;
         
-        void* e = (*h)->array[1];
+        void *min = (*h)->array[1];
 
         (*h)->array[1] = (*h)->array[(*h)->size];
         (*h)->size--;
         percolate_down(*h, 1);
 
-        return e;
+        return min;
 }

@@ -51,7 +51,7 @@ int main(int argc, char **argv)
         }
 
         f = fopen(filename, "r"); 
-        char tgt_file [100];
+        char tgt_file [100] = {0};
         strcat(tgt_file, filename);
         strcat(tgt_file, ".evzip");
         FILE* tgt = fopen(tgt_file, "wb"); 
