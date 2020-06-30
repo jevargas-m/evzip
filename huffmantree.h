@@ -33,6 +33,6 @@ struct treenode* encode_char(char c);
  */
 unsigned char get_i_bit(long unsigned int n, int nbits, int i);
 
-void destroy_tree(struct treenode *root);
+void destroy_tree(struct treenode **root);
 
 #endif

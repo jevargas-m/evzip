@@ -126,7 +126,8 @@ int main(int argc, char **argv)
         fclose(sf);
         fclose(tf);
 
-        destroy_tree(root);
+        destroy_tree(&root);
+        assert(root == NULL);
 
         return 0;
 }
