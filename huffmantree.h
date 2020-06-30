@@ -12,6 +12,10 @@ struct treenode {
 
 #define NUMBER_OF_CHARS 256
 
+/* build huffman codes for an array of frequences indexed by ASCII code
+ */
+struct treenode* build_codes(int *frequencies);
+
 /* add a bit and return next node in the tree, if its a leaf
  * zero and one pointers will be null and nbits/n/character
  *  contain relevant values
@@ -24,8 +28,6 @@ struct treenode* decode_bit(struct treenode *root, unsigned short bit);
  * return: NULL if char is not a leaf on the tree
  */ 
 struct treenode* encode_char(char c);
-
-struct treenode* build_codes(int *frequencies);
 
 /* get the i'th bit on a number n of nbits (start at 1 end at nbits)
  */
