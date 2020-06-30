@@ -75,7 +75,7 @@ struct treenode* build_tree(int *frequencies)
                 if (frequencies[i] > 0) {
                         struct treenode *n = create_leaf(i, frequencies[i]);
 
-                        int ret = add_element(&heap, (void *) n);
+                        int ret = add_element(&heap, (void*) n);
                         assert(ret != -1);
                 }
         }
