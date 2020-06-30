@@ -123,7 +123,7 @@ void populate_codes(struct treenode *root)
                 if (root->nbits > 0)
                         (root->one)->code = root->code << 1;
                 
-                (root->one)->code += 1;
+                (root->one)->code++;
                 (root->one)->nbits = root->nbits + 1;
                 populate_codes(root->one);
         }

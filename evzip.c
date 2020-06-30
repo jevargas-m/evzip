@@ -109,7 +109,7 @@ int main(int argc, char **argv)
         while ( fread(&code_in, sizeof(code_in), 1, sf) == 1) {
                 
                 for (int i = 1; i <= 8; i++) {
-                        unsigned char bit = get_i_bit((long unsigned int) code_in, 8, sizeof(long unsigned int) - 8 + i);
+                        unsigned char bit = get_i_bit((long unsigned int) code_in, sizeof(code_in) * 8, sizeof(long unsigned int) - 8 + i);
                         t = decode_bit(t, bit);
                         if (t == NULL)
                                 break;
