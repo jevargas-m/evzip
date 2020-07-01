@@ -1,5 +1,4 @@
 /* #define DEBUG */
-
 #include <stdlib.h>
 #include <assert.h>
 
@@ -10,7 +9,8 @@
 #include "huffmantree.h"
 #include "heap/heap.h"
 
-struct treenode *codes [NUMBER_OF_CHARS] = {0};
+/* used for memoization */
+static struct treenode *codes [NUMBER_OF_CHARS] = {0};
 
 int compare_freqs(void* n1, void* n2) 
 {
@@ -20,9 +20,13 @@ int compare_freqs(void* n1, void* n2)
         return n2_ptr->freq - n1_ptr->freq;
 }
 
+/* create a node that adds the freq of two nodes and attaches them
+ * as children on zero and one
+ */ 
 struct treenode* create_internal_node(struct treenode *n1, struct treenode *n2)
 {
         struct treenode* new_node = malloc(sizeof(struct treenode));
+        assert(new_node);
         
         new_node->character = 0;
         new_node->freq = n1->freq + n2->freq;
@@ -37,6 +41,7 @@ struct treenode* create_internal_node(struct treenode *n1, struct treenode *n2)
 struct treenode* create_leaf(int character, int freq)
 {
         struct treenode *leaf = malloc(sizeof(struct treenode));
+        assert(leaf);
 
         leaf->character = character;
         leaf->freq = freq;
@@ -89,7 +94,7 @@ struct treenode* build_tree(int *frequencies)
                 assert(min_2);
 
                 struct treenode *new_parent = create_internal_node(min_1, min_2);
-                int ret = add_element(&heap, (void *) new_parent);
+                int ret = add_element(&heap, (void*) new_parent);
                 assert(ret != -1);
         }
 
