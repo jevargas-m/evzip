@@ -1,0 +1,3 @@
+./evzip examples/mobydick_ascii
+./evunzip examples/mobydick_ascii.ez examples/mobydick_uncompressed
+diff examples/mobydick_ascii examples/mobydick_uncompressed

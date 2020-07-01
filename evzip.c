@@ -28,61 +28,51 @@ void print_codes(struct treenode *root, int *freqs)
 int main(int argc, char **argv)
 {
         int freqs [NUMBER_OF_CHARS] = {0};
-        int nchars = 0;      
         
         /* read source file and populate frequencies */
-        if (argc != 2) {    /* check if there is an argument present */
+        if (argc != 2) {
 		perror("usage: ./evzip <text file>\n");
 		return 1;
 	}
-        char* filename = argv[1] ;
+        char *src_filename = argv[1] ;
         
-        FILE* f = fopen(filename, "r"); /* create file handler */
-	if (f == NULL) {
+        FILE *src_file = fopen(src_filename, "r");
+	if (src_file == NULL) {
 		perror("open_file: could not open file\n");
 		return 1;
 	}
 
         char c;
-        while ((c = fgetc(f)) != EOF) {
-                int i = (int) c;
-                freqs[i]++;
-                nchars++;
-        }
-        fclose(f);
-
+        while ((c = fgetc(src_file)) != EOF)
+                freqs[(int) c]++; /* cast to avoid warning */
+        
+        fclose(src_file);
+        
         /* build tree */
         struct treenode *root = build_codes(freqs);
 
         print_codes(root, freqs);
 
-        char tgt_file [100] = {0};
-        strcat(tgt_file, filename);
-        strcat(tgt_file, ".ez");
-        FILE *tgt1 = fopen(tgt_file, "wb"); 
-        assert(tgt1);
+        char tgt_filename [100] = {0};
+        strcat(tgt_filename, src_filename);
+        strcat(tgt_filename, ".ez");
+        FILE *tgt_file = fopen(tgt_filename, "wb"); 
+        assert(tgt_file);
         
-        f = fopen(filename, "r"); 
+        src_file = fopen(src_filename, "r"); 
         int bit_counter = 0;
         int counter = 0;
         unsigned char out_char = 0;
-        unsigned long int total_chars = 0;
 
         /* write headers */
-        int code = 0xc4a2b175;
-        fwrite(&code, sizeof(code),1 ,tgt1);
-        fwrite(&nchars, sizeof(nchars),1 ,tgt1);
-        code = 0xC0DE;
-        fwrite(&code, sizeof(code),1 ,tgt1);
-        for (int i = 0; i < NUMBER_OF_CHARS; i++)
-                fwrite(&freqs[i], sizeof(int), 1, tgt1);    
-        
+        int code = 0xC0DE;
+        fwrite(&code, sizeof(code),1 ,tgt_file);
+        fwrite(freqs, sizeof(freqs[0]), NUMBER_OF_CHARS, tgt_file); 
         code = 0xDADA;
-        fwrite(&code, sizeof(code), 1 ,tgt1);
+        fwrite(&code, sizeof(code), 1 ,tgt_file);
 
-        while ((c = fgetc(f)) != EOF) {
+        while ((c = fgetc(src_file)) != EOF) {
                 counter++;
-                total_chars++;
                 struct treenode *t = encode_char(c);
                 if (t == NULL) {
                         printf("ERROR: file not properly ASCII formated, %c at %d not recognized\n", c, counter);
@@ -96,7 +86,7 @@ int main(int argc, char **argv)
                         out_char += bit;
                         bit_counter++;
                         if (bit_counter == 8 * sizeof(out_char)) {
-                                fwrite(&out_char, sizeof(out_char), 1, tgt1);
+                                fwrite(&out_char, sizeof(out_char), 1, tgt_file);
                                 bit_counter = 0;
                                 out_char = 0;
                         }
@@ -106,11 +96,11 @@ int main(int argc, char **argv)
         /* write residual bits in MSB-s with trailing 0 */
         if (bit_counter) {
                 out_char = out_char << (8 * sizeof(out_char) - bit_counter - 1);
-                fwrite(&out_char, sizeof(out_char), 1, tgt1);
+                fwrite(&out_char, sizeof(out_char), 1, tgt_file);
         }
                 
-        fclose(f);
-        fclose(tgt1);
+        fclose(src_file);
+        fclose(tgt_file);
         destroy_tree(&root);
         assert(root == NULL);
 
