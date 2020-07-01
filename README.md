@@ -54,7 +54,7 @@ Implement a Full-Binary with prefix codes based on single character frequencies.
 
 For encoding `huffmantree.c` maintains a memoized array with the codes for every ASCII code.  To encode compressed output as a file it is done by manipulating individual bits for writing a defined binary file, that starts with the frequencies of each ASCII code in the original uncompressed file as follows: 
 ```
-0xC0DE |Freq for ASCII code 0| |Freq for ASCII code 1| ..... |Freq for ASCII code 2|
+0xC0DE |Freq for ASCII code 0| |Freq for ASCII code 1| ..... |Freq for ASCII code 255|
 0xDADA Encoded bits in a consecutive way
 ```
 
