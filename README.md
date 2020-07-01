@@ -28,7 +28,7 @@ iconv -f utf-8 -t ascii//TRANSLIT "source file" > "destination_file"
 Enabling the line `#define VERBOSE` in the source file `evzip.c` would make the program print a summary of all the prefix codes in the tree.
 
 For example compressing a file containing the text `Mary has a little lamb` will output:
-
+![mary](/examples/mary.png)
 
 ### Un-compress a file:
 ```
