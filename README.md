@@ -24,6 +24,12 @@ Important to make sure file is ASCII encoded (not extended UTF), in order to con
 iconv -f utf-8 -t ascii//TRANSLIT "source file" > "destination_file"
 ```
 
+#### Verbose output
+Enabling the line `#define VERBOSE` in the source file `evzip.c` would make the program print a summary of all the prefix codes in the tree.
+
+For example compressing a file containing the text `Mary has a little lamb` will output:
+
+
 ### Un-compress a file:
 ```
 ./evunzip "source ez file" "destination file"
@@ -32,12 +38,13 @@ Will output an identical file as the one originally compressed.
 
 Both files equality can be checked with:
 ```
-diff file1 file2
+diff --report-identical-files file1 file2
 ```
 
 ### Example
-Execute: `./my_diff_test` for everything in action.  Compressing the full Moby Dick novel in about 50% the original size.
+Execute: `./my_diff_test` for everything in action.  Compressing the full Moby Dick novel in about 43% the original size.
 
+![example](/examples/example.png)
 
 ## Key concepts
 Use Huffman codes algorithm for recursively generating a full binary tree in which each leaf is a pre-fix code for a character, and each internal node has two children `zero` and `one` with a path leading to a pre-fix code.

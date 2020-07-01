@@ -1,9 +1,13 @@
+/* comment out following line to print a summary of codes in the tree */
+/* #define VERBOSE */
+
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
 
 #include "huffmantree.h"
 
+#ifdef VERBOSE
 void print_codes(struct treenode *root, int *freqs) 
 {
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
@@ -24,6 +28,7 @@ void print_codes(struct treenode *root, int *freqs)
                 }
         }
 }
+#endif
 
 int main(int argc, char **argv)
 {
@@ -51,7 +56,9 @@ int main(int argc, char **argv)
         /* build tree */
         struct treenode *root = build_codes(freqs);
 
+#ifdef VERBOSE
         print_codes(root, freqs);
+#endif
 
         char tgt_filename [100] = {0};
         strcat(tgt_filename, src_filename);

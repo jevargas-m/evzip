@@ -1,3 +1,4 @@
-./evzip examples/mobydick_ascii
-./evunzip examples/mobydick_ascii.ez examples/mobydick_uncompressed
-diff examples/mobydick_ascii examples/mobydick_uncompressed
+time ./evzip examples/mobydick_ascii
+time ./evunzip examples/mobydick_ascii.ez examples/mobydick_uncompressed
+diff --report-identical-files examples/mobydick_ascii examples/mobydick_uncompressed
+ls -l examples/
