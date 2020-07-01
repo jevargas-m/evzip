@@ -52,9 +52,9 @@ See: https://en.wikipedia.org/wiki/Huffman_coding for further info on the algori
 
 Implement a Full-Binary with prefix codes based on single character frequencies.  Implements a priority_queue as a min-heap with an underliying array to define the nodes with minimum frequency.  See `heap/` for implementation details.
 
-For encoding `huffmantree.c` maintains a memoized array with the codes for every ASCII code.  To encode compressed output as a file it is done by manipulating individual bits for writing a defined binary file as follows: 
+For encoding `huffmantree.c` maintains a memoized array with the codes for every ASCII code.  To encode compressed output as a file it is done by manipulating individual bits for writing a defined binary file, that starts with the frequencies of each ASCII code in the original uncompressed file as follows: 
 ```
-0xC0DE |Frequency for ASCCI code 0| |Frequency for ASCCI code 1| ..... |Frequency for ASCCI code 255|
+0xC0DE |Freq for ASCII code 0| |Freq for ASCII code 1| ..... |Freq for ASCII code 2|
 0xDADA Encoded bits in a consecutive way
 ```
 
