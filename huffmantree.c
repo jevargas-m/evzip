@@ -162,7 +162,7 @@ unsigned char get_i_bit(long unsigned int n, int nbits, int i)
         int size = sizeof(n) * 8; /* 8 bits per byte */
         long unsigned int tmp = n << (size - nbits + i - 1);
 
-        return (unsigned short) (tmp >> (size - 1));
+        return (unsigned char) (tmp >> (size - 1));
 }
 
 void destroy_tree(struct treenode **root)
