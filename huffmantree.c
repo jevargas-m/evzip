@@ -153,11 +153,7 @@ struct treenode* encode_char(char c)
 struct treenode* decode_bit(struct treenode *root, unsigned short bit)
 {
         assert(bit == 1 || bit == 0);
-
-        if (bit == 1)
-                return root->one ? root->one : NULL;
-        else
-                return root->zero ? root->zero : NULL;
+        return bit == 1 ? root->one : root->zero;
 }
 
 unsigned char get_i_bit(long unsigned int n, int nbits, int i)
