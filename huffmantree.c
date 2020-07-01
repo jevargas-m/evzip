@@ -32,6 +32,7 @@ struct treenode* create_internal_node(struct treenode *n1, struct treenode *n2)
         new_node->freq = n1->freq + n2->freq;
         new_node->code = 0;
         new_node->nbits = 0;
+        new_node->is_leaf = 0;
         new_node->zero = n1;
         new_node->one = n2;
 
@@ -47,6 +48,7 @@ struct treenode* create_leaf(int character, int freq)
         leaf->freq = freq;
         leaf->code = 0;
         leaf->nbits = 0;
+        leaf->is_leaf = 1;
         leaf->one = NULL;
         leaf->zero = NULL;
 

@@ -47,7 +47,7 @@ int main(int argc, char **argv)
                         t = decode_bit(t, bit);
                         if (t == NULL)
                                 break;
-                        if (t->one == NULL && t->zero == NULL) {
+                        if (t->is_leaf) {
                                 fputc(t->character, tgt_file);
                                 counter++;
                                 if (counter == nchars)

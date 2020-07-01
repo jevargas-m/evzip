@@ -6,6 +6,7 @@ struct treenode {
         long unsigned int code;
         char character;
         unsigned int freq;
+        int is_leaf;
         struct treenode *zero;
         struct treenode *one;
 };
