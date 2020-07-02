@@ -54,6 +54,7 @@ For encoding `huffmantree.c` maintains a memoized array with the codes for every
 0xC0DE |Freq for ASCII code 0| |Freq for ASCII code 1| ..... |Freq for ASCII code 255|
 0xDADA Encoded bits in a consecutive way
 ```
+The program will naively assume each character in the source file is from an alphabet of 8-bits (ASCII), and will try to redefine it using shorter ones for common characters.  If the source file is not made like this it will not achieve a good compression rate.
 
 For decoding, read the compressed file, with the frequencies in the `0xC0DE` area generate the Huffman tree.  The function `decode_bit` is fed with consecutive bits read from the file and it returns a node in the tree, if the node is a leaf a character is written to the destination file.
 
