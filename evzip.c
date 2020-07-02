@@ -36,15 +36,15 @@ int main(int argc, char **argv)
         /* read source file and populate frequencies */
         if (argc != 2) {
 		perror("usage: ./evzip <text file>\n");
-		return 1;
+		return -1;
 	}
         char *src_filename = argv[1] ;
         
         FILE *src_file = fopen(src_filename, "rb");
-	if (src_file == NULL) {
-		perror("open_file: could not open file\n");
-		return 1;
-	}
+        if (src_file == NULL) {
+	        perror("error: could not open file\n");
+	        return -1;
+        }
 
         unsigned char c;
         while ((fread(&c, sizeof(c), 1, src_file)) == 1)
@@ -80,12 +80,7 @@ int main(int argc, char **argv)
         while ((fread(&c, sizeof(c), 1, src_file)) == 1) {
                 counter++;
                 struct treenode *t = encode_char(c);
-                if (t == NULL) {
-                        printf("ERROR: file not properly ASCII formated, %c at %d not recognized\n", c, counter);
-                        printf("to convert try:\n");
-                        printf("iconv -f utf-8 -t ascii//TRANSLIT \"source file\" > \"destination_file>\"\n");
-                        return 1;
-                }
+                assert(t);
                 
                 for (int i = 1; i <= t->nbits; i++) {
                         unsigned char bit = get_i_bit(t->code, t->nbits, i);
