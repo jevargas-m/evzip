@@ -1,4 +1,6 @@
+rm examples/mobydick_uncompressed
+rm examples/mobydick_ascii.ez 
 time ./evzip examples/mobydick_ascii
 time ./evunzip examples/mobydick_ascii.ez examples/mobydick_uncompressed
 diff --report-identical-files examples/mobydick_ascii examples/mobydick_uncompressed
-ls -l examples/
+du examples/moby*
