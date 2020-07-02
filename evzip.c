@@ -1,5 +1,5 @@
 /* comment out following line to print a summary of codes in the tree */
-/* #define VERBOSE */
+#define VERBOSE
 
 #include <stdio.h>
 #include <assert.h>
@@ -13,7 +13,7 @@ void print_codes(struct treenode *root, int *freqs)
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
                 if (freqs[i]) {
                         /* test encode and print results */
-                        struct treenode *code = encode_char((char) i);
+                        struct treenode *code = encode_char((unsigned char) i);
                         printf("%c\t: freq = %d\tnbits = %d\tn = x%04lx\t", i, freqs[i], code->nbits, code->code);
 
                         /* test proper decoding */
@@ -24,7 +24,6 @@ void print_codes(struct treenode *root, int *freqs)
                                r = decode_bit(r, bit); 
                         }
                         printf("\n");
-                        assert(r->character == (char) i);
                 }
         }
 }
@@ -41,14 +40,14 @@ int main(int argc, char **argv)
 	}
         char *src_filename = argv[1] ;
         
-        FILE *src_file = fopen(src_filename, "r");
+        FILE *src_file = fopen(src_filename, "rb");
 	if (src_file == NULL) {
 		perror("open_file: could not open file\n");
 		return 1;
 	}
 
-        char c;
-        while ((c = fgetc(src_file)) != EOF)
+        unsigned char c;
+        while ((fread(&c, sizeof(c), 1, src_file)) == 1)
                 freqs[(int) c]++; /* cast to avoid warning */
         
         fclose(src_file);
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
         FILE *tgt_file = fopen(tgt_filename, "wb"); 
         assert(tgt_file);
         
-        src_file = fopen(src_filename, "r"); 
+        src_file = fopen(src_filename, "rb"); 
         int bit_counter = 0;
         int counter = 0;
         unsigned char out_char = 0;
@@ -78,7 +77,7 @@ int main(int argc, char **argv)
         code = 0xDADA;
         fwrite(&code, sizeof(code), 1 ,tgt_file);
 
-        while ((c = fgetc(src_file)) != EOF) {
+        while ((fread(&c, sizeof(c), 1, src_file)) == 1) {
                 counter++;
                 struct treenode *t = encode_char(c);
                 if (t == NULL) {

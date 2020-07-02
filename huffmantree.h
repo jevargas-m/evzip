@@ -4,7 +4,7 @@
 struct treenode {
         int nbits;
         long unsigned int code;
-        char character;
+        unsigned char character;
         unsigned int freq;
         int is_leaf;
         struct treenode *zero;
@@ -28,7 +28,7 @@ struct treenode* decode_bit(struct treenode *root, unsigned short bit);
  * its proper encoding
  * return: NULL if char is not a leaf on the tree
  */ 
-struct treenode* encode_char(char c);
+struct treenode* encode_char(unsigned char c);
 
 /* get the i'th bit on a number n of nbits (start at 1 end at nbits)
  */

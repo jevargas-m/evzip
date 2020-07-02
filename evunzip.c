@@ -35,7 +35,7 @@ int main(int argc, char **argv)
         /* build tree */
         struct treenode *root = build_codes(freqs);
 
-        FILE *tgt_file = fopen(tgt_filename, "w"); 
+        FILE *tgt_file = fopen(tgt_filename, "wb"); 
 
         int counter = 0;
         unsigned char code_in = 0;
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
                         t = decode_bit(t, bit);
                         assert(t);
                         if (t->is_leaf) {
-                                fputc(t->character, tgt_file);
+                                fwrite(&t->character, sizeof(t->character), 1, tgt_file);
                                 counter++;
                                 if (counter == nchars)
                                         break;

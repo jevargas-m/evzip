@@ -76,6 +76,7 @@ struct treenode* build_tree(int *frequencies)
 {
         /* full binary tree has at most 2n-1 nodes */
         struct heap *heap = create_heap((2 * NUMBER_OF_CHARS - 1), compare_freqs);
+        assert(heap);
 
         /* populate heap with all leaves */
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
@@ -101,6 +102,8 @@ struct treenode* build_tree(int *frequencies)
         }
 
         struct treenode *root = remove_min(&heap);
+        assert(root);
+
         destroy_heap(&heap);
 
         return root; 
@@ -109,6 +112,7 @@ struct treenode* build_tree(int *frequencies)
 /* in-order traversal populating codes */
 void populate_codes(struct treenode *root)
 {
+        assert(root);
         if (root->zero) {
                 if (root->nbits > 0)
                         (root->zero)->code = root->code << 1;
@@ -144,7 +148,7 @@ struct treenode* build_codes(int *frequencies)
         return root;
 }
 
-struct treenode* encode_char(char c)
+struct treenode* encode_char(unsigned char c)
 {
         int i = (int) c;
         return codes[i];
