@@ -41,16 +41,16 @@ int main(int argc, char **argv)
         char *src_filename = argv[1] ;
         
         FILE *src_file = fopen(src_filename, "rb");
-        if (src_file == NULL) {
-	        perror("error: could not open file\n");
-	        return -1;
-        }
+        if (src_file == NULL)
+                goto error_file;
 
         unsigned char c;
         while ((fread(&c, sizeof(c), 1, src_file)) == 1)
                 freqs[(int) c]++; /* cast to avoid warning */
         
-        fclose(src_file);
+        /* rewind file for encoding */
+        if (fseek(src_file, 0, SEEK_SET) != 0)
+                goto error_file;
         
         /* build tree */
         struct treenode *root = build_codes(freqs);
@@ -63,19 +63,25 @@ int main(int argc, char **argv)
         strcat(tgt_filename, src_filename);
         strcat(tgt_filename, ".ez");
         FILE *tgt_file = fopen(tgt_filename, "wb"); 
-        assert(tgt_file);
+        if (tgt_file == NULL)
+                goto error_file;
         
-        src_file = fopen(src_filename, "rb"); 
         int bit_counter = 0;
         int counter = 0;
         unsigned char out_char = 0;
 
         /* write headers */
         int code = 0xC0DE;
-        fwrite(&code, sizeof(code),1 ,tgt_file);
-        fwrite(freqs, sizeof(freqs[0]), NUMBER_OF_CHARS, tgt_file); 
+        if (fwrite(&code, sizeof(code),1 ,tgt_file) != 1)
+                goto error_file;
+
+        if (fwrite(freqs, sizeof(freqs[0]), NUMBER_OF_CHARS, tgt_file)
+            != NUMBER_OF_CHARS)
+                goto error_file;
+
         code = 0xDADA;
-        fwrite(&code, sizeof(code), 1 ,tgt_file);
+        if (fwrite(&code, sizeof(code), 1 ,tgt_file) != 1)
+                goto error_file;
 
         while ((fread(&c, sizeof(c), 1, src_file)) == 1) {
                 counter++;
@@ -100,10 +106,18 @@ int main(int argc, char **argv)
                 fwrite(&out_char, sizeof(out_char), 1, tgt_file);
         }
                 
-        fclose(src_file);
-        fclose(tgt_file);
+        if (fclose(src_file) != 0)
+                goto error_file;
+
+        if (fclose(tgt_file) != 0)
+                goto error_file;
+                
         destroy_tree(&root);
         assert(root == NULL);
 
         return 0;
+
+error_file :
+        perror("error: file could not be read/write\n");
+	return -1;
 }
