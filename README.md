@@ -1,7 +1,7 @@
 # evzip / evunzip
 
 ## Compression utility
-Implement Huffman codes to compress and uncompress files via 8-bit alphabet, specially useful on ASCII files.
+Implement Huffman codes to compress and uncompress files via 8-bit alphabet, specially useful on UTF-8/ASCII files.
 
 ## Usage
 

@@ -48,11 +48,6 @@ int main(int argc, char **argv)
         while ((fread(&c, sizeof(c), 1, src_file)) == 1)
                 freqs[(int) c]++; /* cast to avoid warning */
         
-        /* rewind file for encoding */
-        if (fseek(src_file, 0, SEEK_SET) != 0)
-                goto error_file;
-        
-        /* build tree */
         struct treenode *root = build_codes(freqs);
 
 #ifdef VERBOSE
@@ -66,10 +61,6 @@ int main(int argc, char **argv)
         if (tgt_file == NULL)
                 goto error_file;
         
-        int bit_counter = 0;
-        int counter = 0;
-        unsigned char out_char = 0;
-
         /* write headers */
         int code = 0xC0DE;
         if (fwrite(&code, sizeof(code),1 ,tgt_file) != 1)
@@ -83,27 +74,32 @@ int main(int argc, char **argv)
         if (fwrite(&code, sizeof(code), 1 ,tgt_file) != 1)
                 goto error_file;
 
+        if (fseek(src_file, 0, SEEK_SET) != 0)
+                goto error_file;
+
+        /* encode consecutive bits using a buffer for writting to file */
+        int bit_counter = 0;
+        unsigned char byte_buffer = 0;
         while ((fread(&c, sizeof(c), 1, src_file)) == 1) {
-                counter++;
                 struct treenode *t = encode_char(c);
                 assert(t);
                 
                 for (int i = 1; i <= t->nbits; i++) {
                         unsigned char bit = get_i_bit(t->code, t->nbits, i);
-                        out_char += bit;
+                        byte_buffer += bit;
                         bit_counter++;
-                        if (bit_counter == 8 * sizeof(out_char)) {
-                                fwrite(&out_char, sizeof(out_char), 1, tgt_file);
+                        if (bit_counter == 8 * sizeof(byte_buffer)) {
+                                fwrite(&byte_buffer, sizeof(byte_buffer), 1, tgt_file);
                                 bit_counter = 0;
-                                out_char = 0;
+                                byte_buffer = 0;
                         }
-                        out_char = out_char << 1;
+                        byte_buffer = byte_buffer << 1;
                 }
         }
         /* write residual bits in MSB-s with trailing 0 */
         if (bit_counter) {
-                out_char = out_char << (8 * sizeof(out_char) - bit_counter - 1);
-                if (fwrite(&out_char, sizeof(out_char), 1, tgt_file) != 1)
+                byte_buffer = byte_buffer << (8 * sizeof(byte_buffer) - bit_counter - 1);
+                if (fwrite(&byte_buffer, sizeof(byte_buffer), 1, tgt_file) != 1)
                         goto error_file;
         }
                 
