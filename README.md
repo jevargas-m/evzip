@@ -19,10 +19,7 @@ Assumes `clang` compiler is installed.
 ```
 will output a compressed file with `.ez` extension.
 
-Important to make sure file is ASCII encoded (not extended UTF), in order to convert a text file, you can use:
-```
-iconv -f utf-8 -t ascii//TRANSLIT "source file" > "destination_file"
-```
+The utility would compress any file, but will achieve best compression on text files encoded as UTF-8.  Due to the Huffman algorithm used on 8-bit alfabet (ASCII).
 
 #### Verbose output
 Enabling the line `#define VERBOSE` in the source file `evzip.c` would make the program print a summary of all the prefix codes in the tree.
