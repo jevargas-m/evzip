@@ -1,5 +1,5 @@
 /* comment out following line to print a summary of codes in the tree */
-#define VERBOSE
+/* #define VERBOSE */
 
 #include <stdio.h>
 #include <assert.h>

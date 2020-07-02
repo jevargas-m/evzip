@@ -1,6 +1,6 @@
 # evzip / evunzip
 
-## Compression utility for ASCII files 
+## Compression utility
 Implement Huffman codes to compress and uncompress files via 8-bit alphabet, specially useful on ASCII files.
 
 ## Usage
