@@ -103,7 +103,8 @@ int main(int argc, char **argv)
         /* write residual bits in MSB-s with trailing 0 */
         if (bit_counter) {
                 out_char = out_char << (8 * sizeof(out_char) - bit_counter - 1);
-                fwrite(&out_char, sizeof(out_char), 1, tgt_file);
+                if (fwrite(&out_char, sizeof(out_char), 1, tgt_file) != 1)
+                        goto error_file;
         }
                 
         if (fclose(src_file) != 0)
@@ -111,7 +112,7 @@ int main(int argc, char **argv)
 
         if (fclose(tgt_file) != 0)
                 goto error_file;
-                
+
         destroy_tree(&root);
         assert(root == NULL);
 
