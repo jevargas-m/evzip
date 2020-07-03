@@ -125,10 +125,9 @@ void populate_codes(struct treenode *root)
         pretty_print_node(root);
 #endif
 
-        if (root->zero == NULL && root->one == NULL) {
-                int i = (int) root->character;
-                codes[i] = root;
-        }
+        /* save memoized code */
+        if (root->is_leaf)
+                codes[(int) root->character] = root;
                 
         if (root->one) {
                 if (root->nbits > 0)
@@ -150,14 +149,13 @@ struct treenode* build_codes(int *frequencies)
 
 struct treenode* encode_char(unsigned char c)
 {
-        int i = (int) c;
-        return codes[i];
+        return codes[(int) c];
 }
 
 struct treenode* decode_bit(struct treenode *root, unsigned short bit)
 {
         assert(bit == 1 || bit == 0);
-        return bit == 1 ? root->one : root->zero;
+        return bit ? root->one : root->zero;
 }
 
 unsigned char get_i_bit(long unsigned int n, int nbits, int i)
@@ -177,8 +175,6 @@ void destroy_tree(struct treenode **root)
         if ((*root)->one)
                 destroy_tree(&(*root)->one);
         
-        (*root)->zero = NULL;
-        (*root)->one = NULL;
         free(*root);
         *root = NULL;
 }
