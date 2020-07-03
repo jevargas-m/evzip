@@ -7,14 +7,16 @@
 #include <assert.h>
 #include "heap.h"
 
-void destroy_heap(struct heap **h) {
+void destroy_heap(struct heap **h)
+{
         assert(*h);
 
         free((*h)->array);
         free(*h);
 }
 
-struct heap* create_heap(int max, int(*compare)(void*, void*)) {
+struct heap* create_heap(int max, int(*compare)(void*, void*))
+{
         struct heap* h = malloc(sizeof(struct heap));
         if (h == NULL)
                 return NULL;
@@ -29,14 +31,16 @@ struct heap* create_heap(int max, int(*compare)(void*, void*)) {
         return h;
 }
 
-void swap(struct heap *heap, int i, int j) {
+void swap(struct heap *heap, int i, int j)
+{
         void* tmp = heap->array[i];
 
         heap->array[i] = heap->array[j];
         heap->array[j] = tmp;
 }
 
-void percolate_up(struct heap *h, int i) {
+void percolate_up(struct heap *h, int i)
+{
         assert(h);
         
         int parent = (int) i / 2;
@@ -48,28 +52,28 @@ void percolate_up(struct heap *h, int i) {
         }
 }
 
-void percolate_down(struct heap *h, int i) {
+void percolate_down(struct heap *h, int i)
+{
         assert(h);
 
         if (h->size < 2)
                 return;
         
-        int l, r;
+        int left, right, candidate;
 
         while (1) {
-                l = 2 * i;
-                r = l + 1;
+                left = 2 * i;
+                right = left + 1;
                 
-                if (l > h->size)
+                if (left > h->size)
                         break;
                 
-                int candidate;
-                if (r > h->size)
-                        candidate = l;
-                else if (h->compare(h->array[l], h->array[r]) > 0)
-                        candidate = l;
+                if (right > h->size)
+                        candidate = left;
+                else if (h->compare(h->array[left], h->array[right]) > 0)
+                        candidate = left;
                 else
-                        candidate = r;
+                        candidate = right;
                 
                 if (h->compare(h->array[candidate], h->array[i]) > 0)
                         swap(h, i, candidate);
@@ -80,7 +84,8 @@ void percolate_down(struct heap *h, int i) {
         } 
 }
 
-int add_element(struct heap **h, void *e) {
+int add_element(struct heap **h, void *e)
+{
         assert (*h);
 
         if ((*h)->size == (*h)->max)
@@ -93,7 +98,8 @@ int add_element(struct heap **h, void *e) {
         return 0;
 }
 
-void* remove_min(struct heap **h) {
+void* remove_min(struct heap **h)
+{
         assert(h && *h);
 
         if ((*h)->size == 0)
