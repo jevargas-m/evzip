@@ -114,6 +114,7 @@ void populate_codes(struct treenode *root)
 {
         assert(root);
         if (root->zero) {
+                /* if zero shift bits left only */
                 if (root->nbits > 0)
                         (root->zero)->code = root->code << 1;
 
@@ -130,6 +131,7 @@ void populate_codes(struct treenode *root)
                 codes[(int) root->character] = root;
                 
         if (root->one) {
+                /* if one shift bits left and add 1 */
                 if (root->nbits > 0)
                         (root->one)->code = root->code << 1;
                 
