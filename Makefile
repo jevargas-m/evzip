@@ -1,5 +1,5 @@
 # Define variable CC to be the compiler we want to use
-CC = clang
+CC = gcc
 
 # Define CFLAGS for the flags we will want to use with compiler
 CFLAGS = -g -Wall
