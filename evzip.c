@@ -15,12 +15,14 @@ void print_codes(struct treenode *root, int *freqs)
                 if (freqs[i]) {
                         /* test encode and print results */
                         struct treenode *code = encode_char((unsigned char) i);
-                        printf("%c\t: freq = %d\tnbits = %d\tn = x%04lx\t", i, freqs[i], code->nbits, code->code);
+                        printf("%c(%d)\t: freq = %8d\tnbits = %d\tcode = x%04lx ",
+                               i, i, freqs[i], code->nbits, code->code);
 
                         /* print bits on decoding mode */
                         struct treenode *r = root;
                         for (int p = 1; p <= code->nbits; p++) {
-                               unsigned short bit = get_i_bit(code->code, code->nbits, p);
+                               unsigned short bit = get_i_bit(code->code,
+                                                              code->nbits, p);
                                printf("%d", bit);
                                r = decode_bit(r, bit); 
                         }
