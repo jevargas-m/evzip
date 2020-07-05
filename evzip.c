@@ -4,10 +4,11 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #include "huffmantree.h"
 
-#ifdef VERBOSE
 void print_codes(struct treenode *root, int *freqs) 
 {
         for (int i = 0; i < NUMBER_OF_CHARS; i++) {
@@ -16,7 +17,7 @@ void print_codes(struct treenode *root, int *freqs)
                         struct treenode *code = encode_char((unsigned char) i);
                         printf("%c\t: freq = %d\tnbits = %d\tn = x%04lx\t", i, freqs[i], code->nbits, code->code);
 
-                        /* test proper decoding */
+                        /* print bits on decoding mode */
                         struct treenode *r = root;
                         for (int p = 1; p <= code->nbits; p++) {
                                unsigned short bit = get_i_bit(code->code, code->nbits, p);
@@ -27,18 +28,27 @@ void print_codes(struct treenode *root, int *freqs)
                 }
         }
 }
-#endif
 
 int main(int argc, char **argv)
 {
         int freqs [NUMBER_OF_CHARS] = {0};
+        int flag_verbose = 0;
+        int opt;
         
-        /* read source file and populate frequencies */
-        if (argc != 2) {
-		perror("usage: ./evzip <text file>\n");
-		return -1;
-	}
-        char *src_filename = argv[1] ;
+        while ((opt = getopt(argc, argv, "v")) != -1) {
+                switch (opt) {
+                case 'v':
+                        flag_verbose = 1;
+                        break;
+                default:
+                        goto error_usage;
+                }
+        }
+
+        if (optind >= argc)
+                goto error_usage;
+        
+        char *src_filename = argv[optind] ;
         
         FILE *src_file = fopen(src_filename, "rb");
         if (src_file == NULL)
@@ -50,9 +60,8 @@ int main(int argc, char **argv)
         
         struct treenode *root = build_codes(freqs);
 
-#ifdef VERBOSE
-        print_codes(root, freqs);
-#endif
+        if (flag_verbose)
+                print_codes(root, freqs);
 
         char tgt_filename [100] = {0};
         strcat(tgt_filename, src_filename);
@@ -112,9 +121,14 @@ int main(int argc, char **argv)
         destroy_tree(&root);
         assert(root == NULL);
 
+        exit(EXIT_SUCCESS);
         return 0;
 
 error_file :
-        perror("error: file could not be read/write\n");
-	return -1;
+        perror("error: file could not be read/write");
+	exit(EXIT_FAILURE);
+
+error_usage :
+        perror("usage: ./evzip [-v] <src file>");
+	exit(EXIT_FAILURE);
 }

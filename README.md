@@ -22,9 +22,9 @@ will output a compressed file with `.ez` extension.
 The utility would compress any file, but will achieve best compression on text files encoded as UTF-8.  Due to the Huffman algorithm used on 8-bit alfabet (ASCII).
 
 #### Verbose output
-Enabling the line `#define VERBOSE` in the source file `evzip.c` would make the program print a summary of all the prefix codes in the tree.
+Using the command line option `-v` will make the program print a summary of all the prefix codes in the tree.
 
-For example compressing a file containing the text `Mary has a little lamb` will output:
+For example compressing a file containing the text `Mary has a little lamb`, using `./evzip -v examples/MaryLamb.txt` will output:
 ![mary](/examples/mary.png)
 
 ### Un-compress a file:
