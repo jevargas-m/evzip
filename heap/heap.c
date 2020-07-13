@@ -59,17 +59,15 @@ void percolate_down(struct heap *h, int i)
         if (h->size < 2)
                 return;
         
-        int left, right, candidate;
+        int lft, rgt, candidate;
 
-        while ((left = 2 * i) <= h->size) {
-                right = left + 1;
+        while ((lft = 2 * i) <= h->size) {
+                rgt = lft + 1;
                 
-                if (right > h->size)
-                        candidate = left;
-                else if (h->compare(h->array[left], h->array[right]) > 0)
-                        candidate = left;
+                if (rgt > h->size || h->compare(h->array[lft], h->array[rgt]) > 0)
+                        candidate = lft;
                 else
-                        candidate = right;
+                        candidate = rgt;
                 
                 if (h->compare(h->array[candidate], h->array[i]) > 0)
                         swap(h, i, candidate);
