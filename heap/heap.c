@@ -17,7 +17,7 @@ void destroy_heap(struct heap **h)
 
 struct heap* create_heap(int max, int(*compare)(void*, void*))
 {
-        struct heap* h = malloc(sizeof(struct heap));
+        struct heap *h = malloc(sizeof(struct heap));
         if (h == NULL)
                 return NULL;
 
@@ -31,12 +31,12 @@ struct heap* create_heap(int max, int(*compare)(void*, void*))
         return h;
 }
 
-void swap(struct heap *heap, int i, int j)
+void swap(struct heap *h, int i, int j)
 {
-        void* tmp = heap->array[i];
+        void* tmp = h->array[i];
 
-        heap->array[i] = heap->array[j];
-        heap->array[j] = tmp;
+        h->array[i] = h->array[j];
+        h->array[j] = tmp;
 }
 
 void percolate_up(struct heap *h, int i)
@@ -61,12 +61,8 @@ void percolate_down(struct heap *h, int i)
         
         int left, right, candidate;
 
-        while (1) {
-                left = 2 * i;
+        while ((left = 2 * i) <= h->size) {
                 right = left + 1;
-                
-                if (left > h->size)
-                        break;
                 
                 if (right > h->size)
                         candidate = left;
